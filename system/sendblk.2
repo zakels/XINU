@@ -1,0 +1,42 @@
+NAME
+	
+	sendblk
+
+SYNOPSIS
+	
+	#include <xinu.h>
+	
+	syscall sendblk(pid32 pid, umsg32 msg);
+
+DESCRIPTION
+	
+	The sendblk system call is used to send a message to recipient process. It
+	functions like normal send() system call when the message buffer is empty.
+	When the message buffer is full, sendblk blocks sending by putting into a
+	waiting state PR_SNDBLK. When the sending process gets blocked, it saves
+	the msg and the recipient pid to the members of its structure, sendblkmsg
+	and sendblkrcp. And the sending process gets enqueue'd into FIFO waiting
+	queue in the recipient sendqueue.
+	
+RETURN VALUE
+
+	On failure, it returns SYSERR. Otherwise, it returns OK .
+
+ERRORS
+
+	sendblk() fails when the recipient pid is invalid pid. Or the recipient
+	process is unused. Both failtures returns SYSERR.
+
+EXAMPLE
+
+	The program below demonstrates the use of XINU's sendblk().
+
+	#include <xinu.h>
+
+	process sender(pid) {
+		umsg32 msg = 0x13;
+		sendblk(pid , msg);
+		return OK;
+	}
+
+

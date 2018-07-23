@@ -1,0 +1,43 @@
+NAME
+	
+	receive
+
+SYNOPSIS
+	
+	#include <xinu.h>
+	
+	umsg32 receive(void);
+
+DESCRIPTION
+	
+	The receive system call is used to receive messages from the sender processes'
+	or from the sender message queue. If the message buffer is not empty, it checks
+	the queue to see if there exists sender processes. If there is, it dequeues the 
+	first sender process and place the next receive message to be the one in the 
+	message buffer of the first sender process in the queue.
+	
+RETURN VALUE
+
+	It returns the message, type of umsg32, to the caller process.
+
+ERRORS
+
+	receive() fails when there is no message in the recipient message buffer. If 
+	receive() fails, the process gets rescheduled and blocked until a message 
+	arrives.
+
+EXAMPLE
+
+	The program below demonstrates the use of XINU's receive().
+
+	#include <xinu.h>
+
+	process receiver() {
+		umsg32 msg;
+		while (TRUE) {
+			sleep(5);
+			msg = receive();
+		}
+	}
+
+
